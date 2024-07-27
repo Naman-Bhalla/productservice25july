@@ -1,15 +1,14 @@
 package com.scaler.productservice25july.controllers;
 
-import com.scaler.productservice25july.dtos.CreateProductRequestDto;
-import com.scaler.productservice25july.dtos.CreateProductResponseDto;
+import com.scaler.productservice25july.dtos.ErrorResponseDto;
+import com.scaler.productservice25july.dtos.products.*;
 import com.scaler.productservice25july.models.Product;
 import com.scaler.productservice25july.services.ProductService;
-import com.scaler.productservice25july.services.ProductServiceDBImpl;
-import com.scaler.productservice25july.services.ProductServiceFakestoreImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -42,8 +41,19 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public void getAllProducts() {
+    public GetAllProductsResponseDto getAllProducts() {
+        List<Product> products = productService.getAllProducts();
+        GetAllProductsResponseDto response = new GetAllProductsResponseDto();
 
+        List<GetProductDto> getProductResponseDtos = new ArrayList<>();
+
+        for (Product product: products) {
+            getProductResponseDtos.add(GetProductDto.from(product));
+        }
+
+        response.setProducts(getProductResponseDtos);
+
+        return response;
     }
 
     @GetMapping("/{id}")
@@ -56,7 +66,21 @@ public class ProductController {
 
     }
 
-    public void updateProduct() {}
+    @PatchMapping("/{id}")
+    public PatchProductResponseDto updateProduct(
+            @PathVariable("id") Long productId,
+            @RequestBody CreateProductDto productDto
+    ) {
+        Product product = productService.partialUpdateProduct(
+                productId,
+                productDto.toProduct()
+        );
+
+        PatchProductResponseDto response = new PatchProductResponseDto();
+        response.setProduct(GetProductDto.from(product));
+
+        return response;
+    }
 
     public void replaceProduct() {}
 
