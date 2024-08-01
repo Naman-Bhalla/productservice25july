@@ -82,6 +82,7 @@ public class ProductController {
         return response;
     }
 
+    @PutMapping("")
     public void replaceProduct() {}
 
 //    @RequestMapping(name = "NAMAN", value = "/products/")
