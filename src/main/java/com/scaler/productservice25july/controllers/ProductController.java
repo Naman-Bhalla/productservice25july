@@ -2,6 +2,7 @@ package com.scaler.productservice25july.controllers;
 
 import com.scaler.productservice25july.dtos.ErrorResponseDto;
 import com.scaler.productservice25july.dtos.products.*;
+import com.scaler.productservice25july.exceptions.ProductNotFoundException;
 import com.scaler.productservice25july.models.Product;
 import com.scaler.productservice25july.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,7 +25,7 @@ public class ProductController {
 
 
 
-    public ProductController(@Qualifier("fakeStoreProductService") ProductService productService) {
+    public ProductController(@Qualifier("dbProductService") ProductService productService) {
         this.productService = productService;
     }
 
@@ -70,7 +71,7 @@ public class ProductController {
     public PatchProductResponseDto updateProduct(
             @PathVariable("id") Long productId,
             @RequestBody CreateProductDto productDto
-    ) {
+    ) throws ProductNotFoundException {
         Product product = productService.partialUpdateProduct(
                 productId,
                 productDto.toProduct()
