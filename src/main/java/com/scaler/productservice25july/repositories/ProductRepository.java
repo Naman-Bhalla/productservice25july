@@ -1,6 +1,8 @@
 package com.scaler.productservice25july.repositories;
 
 import com.scaler.productservice25july.models.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -45,6 +47,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             nativeQuery = true
     )
     List<Product> somesome2();
+
+    List<Product> findByTitleContaining(String query);
+
+    Page<Product> findAllByTitleContainingAndCategory_Id(
+            String title, Long categoryId, Pageable pageable
+    );
 }
 
 
