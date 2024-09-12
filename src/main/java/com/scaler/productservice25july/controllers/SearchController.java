@@ -56,6 +56,6 @@ public class SearchController {
                                           @RequestParam("pageSize") int pageSize,
                                           @RequestParam("sortingAttribute") String sortingAttribute
     ) {
-
+        return null;
     }
 }
